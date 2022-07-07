@@ -1,12 +1,13 @@
-use env_file_reader::read_file;
+use dotenv::dotenv;
+use std::env;
 use std::net::SocketAddr;
 
 type MResult<T> = Result<T, Box<dyn std::error::Error>>;
 
 #[tokio::main]
 pub async fn main() -> MResult<()> {
-  let env_variables = read_file(".calby_router.env")?;
-  let hyper_addr: SocketAddr = env_variables["hyper_addr"].parse()?;
+  dotenv()?;
+  let hyper_addr: SocketAddr = env::var("HYPER_ADDR")?.parse()?;
   let service = hyper::service::make_service_fn(move |conn: &hyper::server::conn::AddrStream| {
     let env_variables = env_variables.clone();
     let addr = conn.remote_addr();

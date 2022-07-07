@@ -14,3 +14,4 @@ panic = 'abort'
 [dependencies]
 hyper = { version = "0.14", features = ["full"] }
 tokio = { version = "1", features = ["full"] }
+dotenv = "0.15.0"
