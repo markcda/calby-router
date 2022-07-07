@@ -1,0 +1,65 @@
+syntax = "proto3";
+package chats;
+
+
+service Chats {
+    rpc CreateGroup(GroupSettings) returns (ResponseGroup);
+    rpc SendMessage(Message) returns (ResponseMessage);
+    rpc deleteMessage(MsgForDel) returns (ResponseMessage);
+    rpc editMessage(MsgForEdit) returns (ResponseMessage);
+}
+
+// message ChannelSettings {}
+// message PrivateSettings {}
+
+
+message GroupSettings {
+    int32 id = 1;
+    int32 room  = 2;
+    string creator = 3;
+    string displayed_name = 4;
+    string short_name = 5;
+    string chat_type = 6;
+    bytes avatar = 7;
+    string users = 8;
+    bool open = 9;
+    optional string desc = 10;
+}
+
+message MsgForEdit {
+    int32 chat_id = 1;
+    string author = 2;
+    int32 msgId = 3;
+    // we just replace in our db old message for new, so we don't store deleted and old message which edited
+    string msgForReplace = 4;
+}
+
+message MsgForDel {
+    int32 chat_id = 1;
+    string author = 2;
+    int32 msgId = 3;
+    string msgForDelete = 4;  
+}
+
+
+message Message{
+    int32 id = 1;
+    string author = 2;
+    string content = 3;
+    string time = 4;
+    string who_received = 5;
+    string who_read = 6;
+    // добавил чтобы проверять было ли сообщение изменено хоть один раз
+    bool edit = 7;
+}
+
+message ResponseGroup {
+    string uuid = 1;
+    string error = 2;
+    uint32 status = 3;
+}
+
+message ResponseMessage {
+    int32 status = 1;
+    string error = 2;
+}
